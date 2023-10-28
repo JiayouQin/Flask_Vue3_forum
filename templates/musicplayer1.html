@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+
+
+{% block content %}
+
+<body>
+    <script src="js/musicplayer.js" type="text/javascript"></script> 
+    <link rel="stylesheet" href="musicplayer.css">
+    <div id="content">
+      <input type="file" id="thefile" accept="audio/*" />
+      <canvas id="canvas"></canvas>
+      <audio id="audio" controls></audio>
+    </div>
+</body>
+
+{% endblock %}

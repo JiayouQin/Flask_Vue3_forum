@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+<div id='title_shadow'>
+</div>
+<style>
+#title_shadow {
+  box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
+  background-color:skyblue;
+  filter: blur(10px);
+  z-index: 5;
+  opacity: 0.2;
+  position: fixed;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
+</style>
+
+<div style="position: absolute;left: 50%;transform: translate(-50%, 0);;z-index:8">
+	<br><br><br><br><br>
+		<div class="well">
+			<div style="margin: 0 auto 0; width: 1000px">
+			  
+			  {% if name != "Default_user"%}
+			  <h2>Welcome Back! {{name}}</h2>
+			  {% elif name == "Default_user"%}
+			  <h1>Hello! Nice to see you.</h1>
+			  <h3>Readme:</h3>
+				<br><br>
+				<div class="alert alert-info" role="alert">
+					<b>What is this:</b>
+					<p>This is my personal website, using it has all the features of a fourm,<br>
+					<p>I plan to show case my web projects here.<br>
+					<b>Features:</b>
+					<p>Browsing, posting, commenting threads.<br>
+						complete registering user system.<br>
+						upload pictures and videos as posts<br>
+						upload your own music tracks<br>
+					<b>Technical Details:</b>
+					<p>For the moment this website still use http protocal, which means it is not secured!
+					<b>DO NOT use your frequent password!</b><br>
+					All password is encrypted with SHA256 by flask_bcrypt.<br>
+					<b>Skills needed for this website:</b><br>
+					Python(Flask), Javascript, HTML5, CSS, Jinja<br>
+					This message will only shown to unregistered users.
+					</p>
+				</div>
+
+			 	{% endif %}
+		  </div>
+		</div>
+
+	<br><br><br><br><br>
+
+	<div class="well">
+		<h3>Posts:</h3>
+		<br>
+		<div style="padding-left:100px">
+		{% for item in values[::-1] %} 
+		<div style=" display: inline-block;">
+			<!--add a tag:  <span class="label label-default">{{replies|length}}</span>  -->
+			<a style="font-size:170%"href="/posts/{{item._id}}">{{item.title}}</a></div>
+		<div style=" width: 140px; display: inline-block;"><p style="padding-left:40px"><span class="label label-info">{{item.author}}</span></p></div>
+		<br>
+		{% endfor %} 
+	</div>
+	</div>
+	<br><br><br><br><br>
+
+	<div class="well">
+		<h3>Videos:</h3>
+		<br>
+		<div style="padding-left:100px">
+
+		{% for video in videos: %}
+			<div style=" display: inline-block;">
+			<a style="font-size:170%"href="/videos/{{video}}">{{video}}	</a></div>
+			<br>
+
+		{% endfor %}
+			</div>
+	    <div class="section_footer">
+		    	<a class="btn btn-danger" href='/upload'>Upload a Video(Experimental)</a>
+		    </form>
+	    </div>
+	</div>
+
+	<br><br><br><br><br>
+	<div class="well">
+	  <h3> Reply this Post: </h3>
+		<form method="post">
+		  <label for="ftitle">Title</label>
+		  <input type="text" id="ftitle" name="submit_title" size="100"><br><br>
+		  <textarea id="summernote" name="submit_content"></textarea>
+		  <input type="submit" value="Submit">
+		</form>
+		</div>
+<p style="padding: 0px 0px 50px 0px"></p>
+
+</div>
+
+
+<script>
+  $(document).ready(function() {
+    $('#summernote').summernote({
+      placeholder: 'Please do be respectful submitting any posts',
+      tabsize: 4,
+      height: 200
+    });
+  });
+</script>
+
+<style>
+.section_footer {
+    user-select: none;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: right;
+</style>
+
+{% endblock %}

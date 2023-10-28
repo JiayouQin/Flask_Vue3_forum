@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{%block title%}User info{%endblock%}
+
+
+{%block content%}
+<div id='title_shadow'>
+</div>
+<style>
+#title_shadow {
+  box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
+  background-color: ghostwhite;
+  filter: blur(10px);
+  z-index: 5;
+  opacity: 0.2;
+  position: fixed;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
+</style>
+
+
+<div style="position: absolute;left: 50%;transform: translate(-50%, 0);;z-index:8">
+<br><br><br><br><br>
+
+
+
+	<div class="well">
+		<h1 style='text-align:center;'>Hello {{name}}<small style='font-size:30%'>{% if session["email"]: %}{{session["email"]}}{% endif %}</small></h1>	
+		
+		<br>
+		<div style="padding-left:10%">
+
+		<p> you  have following messages </p>
+		{% with messages = get_flashed_messages() %}
+			{% if messages%}
+				{% for msg in messages %}
+					<p> {{msg}} </p>
+				{% endfor%}
+			{% endif %}
+		{% endwith %}
+		</div>
+	</div>
+	<br><br><br><br><br>
+	<div class="well">
+		<div style="padding-left:10%">
+			<h1>Your Music:</h1>
+			{% for tune in user_music %}
+				<div class="container-fluid" style='width:100;padding:10px 0px 10px'>
+				<p style='padding-left:10%;'>{{tune}} 
+					<a class="btn btn-danger" style='position: absolute;right:50px'>删除</a></p><br>
+				</div>
+			{% endfor%}
+		</div>
+	</div>
+</div>
+
+{%endblock%}
+
+
+
+
+
+
+<style>
+
+.section_footer {
+    user-select: none;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: right;
+
+</style>

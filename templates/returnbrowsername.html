@@ -1,0 +1,16 @@
+<html>
+
+<body>
+<button id='tellagent' onclick='getagent()'>what's the agent</button>
+<p id='agent'>not clicked</p>
+<script>
+var useragent1 = navigator.userAgent
+
+function getagent(){
+console.log('123');
+document.getElementById('agent').innerHTML = typeof(useragent1)+useragent1
+
+}
+</script>
+</body>
+</html>

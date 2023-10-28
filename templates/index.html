@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+<!-- index begin -->
+<div v-show='entrySelected !=-1'>
+    <div class="postWindow_shadow" @click='backToMain'></div>
+    <div class='postWindow'>
+
+      <div class="well">
+        <div class="page-header">
+          <div style='padding:5px 0px 5px 0px;border-radius: 10px;'>
+          <h1 style="text-align:center;">[{currentEntry['title']}] <small style="font-size:40%">by [{currentEntry['author']}]</small></h1>
+          <p style="text-align:right;font-size:130%"> <span class="label label-default">[{replies}]</span> replies</span></p>
+          </div>
+      </div>
+      <div class="well" style='overflow:scroll'>
+        <p v-html="currentEntry['content']"></p>
+      </div>
+
+<!--         {% for reply in replies %}
+          {% set num = replies|length - loop.index %}
+              {% set num = num + 1 %}
+          <div class="panel panel-default">
+            <div style="padding-left: 30px" class="panel-body">
+              <span class="label label-default">{{num}}</span> <b>{{reply.name}}:</b>
+
+            </div>
+
+        <div class="panel-footer">
+
+          <p>{{reply.reply|safe}}</p>
+          <p style="text-align:right;">Place holder: Time Posted</p>
+        </div>
+      </div>  
+      <br><br>
+
+      {% endfor %} -->
+
+
+
+<!--     <div class="well">
+      <h3> Reply this Post: </h3>
+      <form method="post">
+        <textarea id="summernote" name="reply_content"></textarea>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+
+      <script>
+        $(document).ready(function() {
+          $('#summernote').summernote({
+            placeholder: 'Please do be respectful submitting any posts',
+            tabsize: 4,
+            height: 200
+          });
+        });
+      </script> -->
+    </div>
+  </div>
+</div><!-- post block ends here -->
+<div style="position: absolute;left: 50%;transform: translate(-50%, 0);width: 90%;z-index:8">
+        <div class="well">
+            <div style="margin: 0 auto 0; width: 90%">
+              
+              <h1 v-if='user'>Welcome Back! [{user}]</h1>
+              <h1 v-else>Hello! Nice to meet you.</h1>
+                <br><br>
+                <div v-if='!user'class="alert alert-info" role="alert">
+                    <h3>Readme:</h3>
+                    <b>What is this:</b>
+                    <p>This is my personal website, using it has all the features of a fourm,<br>
+                    <p>I plan to show case my web projects here.<br>
+                    <b>Features:</b>
+                    <p>Browsing, posting, commenting threads.<br>
+                        complete registering user system.<br>
+                        upload pictures and videos as posts<br>
+                        upload your own music tracks<br>
+                    <b>Technical Details:</b>
+                    <p>For the moment this website still use http protocal, which means it is not secured!
+                    <b>DO NOT use your frequent password!</b><br>
+                    All password is encrypted with SHA256 by flask_bcrypt.<br>
+                    <b>Skills needed for this website:</b><br>
+                    Python(Flask), Javascript, HTML5, CSS, Jinja<br>
+                    This message will only shown to unregistered users.
+                    </p>
+                </div>
+
+          </div>
+        </div>
+
+    <div class="well">
+        <h3>Posts:</h3>
+        <br>
+        <div style="padding-left:100px">
+        <div v-for="e in entries">
+            <div style=" display: inline-block;">
+                <!--add a tag:  <span class="label label-default">{{replies|length}}</span>  -->
+                <a style="font-size:170%" @click='clickOnEntry(e)'>[{e['title']}]</a></div>
+            <div style=" width: 140px; display: inline-block;"><p style="padding-left:40px"><span class="label label-info">[{e['author']}]</span></p></div>
+            <br>
+        </div>
+        </div>
+    </div>
+    <div class="well">
+        <h3>Videos:</h3>
+        <br>
+        <div style="padding-left:100px">
+
+        {% for video in videos: %}
+            <div style=" display: inline-block;">
+            <a style="font-size:170%"href="/videos/{{video}}">{{video}} </a></div>
+            <br>
+
+        {% endfor %}
+            </div>
+        <div class="section_footer">
+                <a class="btn btn-danger" href='/upload'>Upload a Video(Experimental)</a>
+            </form>
+        </div>
+    </div>
+
+    <div class="well">
+      <h3>Write your Post: </h3>
+        <form method="post">
+          <label for="ftitle">Title</label>
+          <input type="text" id="ftitle" name="submit_title" style='width:80%'><br><br>
+          <textarea id="summernote" name="submit_content"></textarea>
+          <input type="submit" value="Submit">
+        </form>
+        </div>
+    <p style="padding: 0px 0px 50px 0px"></p>
+
+
+
+
+</div>
+
+
+
+<!-- index end -->
+
+{% endblock %}

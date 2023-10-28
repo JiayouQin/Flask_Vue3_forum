@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+
+
+{% block content %}
+
+<div style="margin: 0 auto; width: 1000px">
+  <br><br><br><br><br>
+    <div class="well">
+      <h1>Upload music/videos</h1>
+      <p>Uploading music support mp3 or wav format, name must not contain any space</p>
+      <p>music uploaded will only be available to yourself</p>
+      <p>Videos Uploaded will be published as a post</p>
+    
+    <form method="post" enctype="multipart/form-data">
+    <input type="text" name="file_name" /><br>
+    <input type="file" name="file">
+    <input type="submit" name="submit"/>
+    <br>
+    </form>
+    </div>
+
+
+  <br><br>
+
+<script>
+document.getElementById('fileInput').onchange = function () {
+  alert('Selected file: ' + this.value);
+};
+</script>
+
+{% endblock %}

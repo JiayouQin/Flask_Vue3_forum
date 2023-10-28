@@ -1,0 +1,64 @@
+{% extends "base.html"%}
+{% block title %} 
+Admin
+{% endblock %}
+
+{% block content %} 
+<div id='title_shadow'>
+</div>
+<style>
+#title_shadow {
+  box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
+  background-color:skyblue;
+  filter: blur(10px);
+  z-index: 5;
+  opacity: 0.2;
+  position: fixed;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
+</style>
+
+<div style="position: absolute;left: 50%;transform: translate(-50%, 0);;z-index:8">
+	<br><br><br><br><br>
+
+
+	<div class="well">
+		<div style="margin: 0 auto 0; width: 1000px">
+
+			<p>last post:{{last_post_id}}</p>
+			<p>last reply:{{last_reply_id}}</p>
+			<p> --------user-----------</p>
+			<form action = "#" method = "POST">
+			{% for item in values %} 
+				<p style='padding:5px 0 5px'>Name: {{item.name}}, email: {{item.email}}, id: {{item._id}}
+					<button style='float:right;position:absolute;right:20px' class="btn btn-danger" name="del_button" value="user {{item._id}} 0">Delete User</button></p>
+			{% endfor %} 
+			</form>
+			<br><br>
+			<p> --------entries-----------</p>
+			<form action = "#" method = "POST">
+			{% for item in entries %} 
+				<p style='padding:5px 0 5px'>title: {{item.title}}, id: {{item._id}}, author: {{item.author}}
+					<button class="btn btn-danger" name="del_button" value="entry {{item._id}} 0" style='float:right;position:absolute;right:20px'>
+					Delete</button>
+					<button class="btn btn-danger" name="del_button" value="entry {{item._id}} 1" style='float:right;position:absolute;right:130px'>
+					Delete All</button>
+				</p>
+			{% endfor %} 
+			</form><br><br>
+			<p>---------replies-----------</p>
+			{% for item in found_replies %} 
+			<form action = "#" method = "POST">
+				<p>name: {{item.name}} id: {{item._id}}, adressing id: {{item.adressing_id}} content: {{item.reply}}</p>
+				<button class="btn btn-danger" name="del_button" value="reply {{item._id}} 0">Delete</button>
+				<button class="btn btn-danger" name="del_button" value="reply {{item._id}} 1">Delete All</button>
+			{% endfor %} 
+			</form>
+
+	</div>
+
+</div>
+
+{% endblock %}

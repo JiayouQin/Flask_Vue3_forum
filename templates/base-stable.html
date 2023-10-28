@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+
+
+</head>
+
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">主页</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <!--<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Link</a></li>-->
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">功能（测试中） <span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="/upload">上传文件</a></li>
+        <li><a href="#">Encrypted Voip chat</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="upload">Image upscaling</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="#">Project SV</a></li>
+      </ul>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li><a href="#">Link</a></li>-->
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {% if "user" in session:%}
+              <li><a href="/logout">Logout</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="/user">User Page</a></li>
+            {% else %}
+              <li><a href="/login">Login</a></li>
+              <li><a href="/register">Register</a></li>
+            {%endif%}
+          </ul>
+        </li>
+      <form class="navbar-form navbar-right">
+        <div class="form-group">
+
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<!-- Navbar End -->
+
+
+  {% block content %}
+
+  {% endblock %}
+
+<p style="padding: 0px 0px 25px 0px"></p>
+<p>
+
+</p>
+
+
+
+{% if music|length > 0:%}
+
+      <div class="grow">
+        <div class="hover-hide" style='text-align:center;color:black'><b>音乐</b></div>
+            <div class="hover-content">
+              {% for tune in user_music %}
+              <div class='container-fluid' style='text-align: left;'>
+                <a style='font-size:110%;color:black'>{{tune}}</a>
+                <audio controls style='float:right'>
+                <source src='{{ url_for("static", filename="/music/"+name+"/"+tune) }}' type="audio/mpeg"><br>
+                Your browser does not support the audio element.
+                </audio>
+              </div>  
+              {%endfor%}
+              {% for tune in music %}
+              <div class='container-fluid' style='text-align: left;'>
+                <a style='font-size:110%;color:black'>{{tune}}</a>
+                <audio controls style='float:right'>
+                <source src='{{ url_for("static", filename="/music/Default_User/"+tune) }}' type="audio/mpeg"><br>
+                Your browser does not support the audio element.
+                </audio>
+              </div>  
+              {%endfor%}
+            </div>
+        </div>
+      </div>
+{% endif %}
+
+
+<style>
+
+body{
+
+  background-color: transparent;
+}
+.grow {
+  user-select: none;
+  padding: 15px 10px 5px 10px;
+  border-radius: 20px;
+  height: 50px;
+  width: 150px;
+  position: fixed;
+  right:5%;
+  bottom: 20px;
+  transition: height 0.8s;
+  -webkit-transition: height 0.8s;
+  background-color: white;
+}
+.hover-content {display:none;}
+
+.grow:hover {height: {{65*(music|length+user_music|length)}}px;width: 500px;}
+.grow:hover .hover-content {display:block;}
+.grow:hover .hover-hide { text-align:center;padding:5px;display:none;}
+
+
+.footer {
+    text-align: right;
+    user-select: none;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,0.6);
+    color: white;
+}
+
+</style>
+
+
+
+<script src="/static/js/Vector2.js"></script>
+<script src="/static/js/simplex-noise.js"></script>
+<script src="/static/js/FMath.js"></script>
+<script src='/static/js/stars.js'> </script>
+</body>
+</html>

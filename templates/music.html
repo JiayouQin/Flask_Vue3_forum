@@ -1,0 +1,26 @@
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<div class="footer">
+		<p>Why is this not working???</p>
+  	<audio controls autoplay>
+  	{% for tune in music%}
+  	<source src='{{ url_for("static", filename="/music/"+tune) }}' type="audio/mpeg">
+  	{% endfor %}
+	Your browser does not support the audio element.
+	</audio>
+</div>
+
+	<style>
+.footer {
+   position: fixed;
+   right: 0;
+   bottom: 0;
+   width: 100%;
+   color: white;
+   text-align: right;
+}
+</style>
+</frameset>
+</html>

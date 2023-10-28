@@ -1,0 +1,114 @@
+#music_container{
+	white-space: nowrap;overflow-x: hidden;overflow-y: auto;
+	text-align: left;width: 450px;position: absolute;left: 10px;
+}
+
+.shadow_overlay{
+  padding: 15px 10px 5px 10px;
+  border-radius: 20px;
+	background-color:white;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index:11;
+	opacity: 0.4;
+}
+
+.shadow {
+  box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
+  background-color: darkgray;
+  filter: blur(10px);
+	height: 100%;
+  width: 100%;
+  z-index: -1;
+  position: relative;
+  opacity: 0.6;
+}
+
+.hover-hide{
+    font-size:90%;
+    padding:2px,5px,5px;
+    text-align:center;
+    color:black;
+  }
+
+.grow {
+	user-select: none;
+  height: 50px;
+  width: 50px;
+  position: fixed;
+  right:5%;
+  bottom: 10%;
+  transition: height 0.8s;
+  -webkit-transition: height 0.8s;
+  z-index: 15;
+}
+.hover-content {display:none;}
+
+.grow:hover {width: 500px;} + .shadow {height: 600px;width: 500px;}
+.grow:hover .hover-content {display:block;}
+.grow:hover .hover-hide { text-align:center;padding:5px;display:none;}
+
+.postWindow {
+	position: absolute;
+  width: 80%;
+  left:10%;
+  /*top: 10%;*/
+  z-index: 25;
+}
+
+.postWindow_shadow {
+	user-select: none;
+	top: 0%;
+	left: 0%;
+  background-color: darkgray;
+  filter: blur(10px);
+	height: 100%;
+  width: 100%;
+  z-index: 20;
+  position: fixed;
+  opacity: 0.5;
+}
+
+
+.footer {
+    text-align: right;
+    user-select: none;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,0.6);
+    color: white;
+}
+
+ .btn-play-pause {
+	 cursor: pointer;
+	 position: absolute;
+	 z-index: 1;
+	 bottom: 20px;
+	 left: 30px;
+	 box-sizing: border-box;
+	 padding: 12px 16px;
+	 border: 1px solid white;
+	 color: white;
+	 font-family: 'Montserrat', sans-serif;
+	 font-size: 1.2rem;
+	 animation: clickMe 0.5s;
+	 transition: opacity 0.8s;
+}
+ .btn-play-pause .fa {
+	 margin-right: 8px;
+}
+ .btn-play-pause .fa-spinner {
+	 animation: spin 1.5s infinite;
+}
+ .btn-play-pause.loading {
+	 pointer-events: none;
+	 pointer-events: none;
+	 opacity: 0.5;
+	 animation: load 3s infinite;
+	 transition: none;
+}
