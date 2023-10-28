@@ -136,10 +136,11 @@ const app = Vue.createApp({
     compatConfig: { MODE: 3 },
     data(){
         return {
+            ret:'ok',
             user: null,
             entries: [],
             entrySelected:-1,
-            replies:-1,
+            replies:[],
             videos: [],
             isPlaying: false,
             tracks: [],
@@ -154,6 +155,9 @@ const app = Vue.createApp({
         },
         boxHeight(){
             return this.tracks.length*40+40;
+        },
+        getValue(num){
+            return num;
         },
     },
     methods:{
@@ -173,6 +177,7 @@ const app = Vue.createApp({
             this.entrySelected = this.entries.indexOf(e);
             this.yOffsetBuf = window.pageYOffset;
             window.scrollTo(0, 0);
+            this.fetchReplies();
         },
         fetchEntries(){
             fetch("api_entries")
@@ -181,6 +186,58 @@ const app = Vue.createApp({
                 this.entries = json["entires"];
                 this.videos = json["videos"];
             })
+        },
+        submitPost() {    // Simple POST request with a JSON body using fetch
+          let requestOptions = {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json', },
+            body: JSON.stringify({
+                title: this.$refs.submitTitle.value,
+                content: this.$refs.submitPost.value}),
+          };
+          fetch("api_submit_post", requestOptions)
+            .then(response => response.json())
+            .then(data =>{
+                if(data['ret']=="ok"){
+                    this.fetchEntries();
+                    title: this.$refs.submitTitle.value = '';
+                    $('#summernote').summernote('reset');
+                }
+                else{
+                    alert(data['ret'])
+                }
+          })
+        },
+        submitReply(){
+            let requestOptions = {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json', },
+            body: JSON.stringify({
+                postID: this.currentEntry['id'],
+                content: this.$refs.submitReply.value}),
+          };
+          fetch("api_submit_reply", requestOptions)
+            .then(response => response.json())
+            .then(data =>{
+                if(data['ret']=="ok"){
+                    this.fetchReplies();
+                    $('#summernoteReply').summernote('reset');
+                }
+                else{
+                    alert(data['ret'])
+                }
+          })
+        },
+        fetchReplies() {    // Simple POST request with a JSON body using fetch
+          let requestOptions = {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json', },
+            body: JSON.stringify({postID: this.currentEntry['id']}),
+          };
+          fetch("api_replies", requestOptions)
+            .then(response => response.json())
+            .then(data =>{
+                this.replies = (data['replies'])? data['replies']:[] })
         },
         fetchMusic(){
             fetch("api_music_list")
@@ -225,3 +282,20 @@ const app = Vue.createApp({
 
 let canvas, ctx, audio;
 app.mount("#app")
+
+$(document).ready(function() {
+  $('#summernotePost').summernote({
+    dialogsInBody: true,
+    placeholder: 'Please do be respectful submitting any posts',
+    tabsize: 4,
+    height: 200
+  });
+});
+$(document).ready(function() {
+  $('#summernoteReply').summernote({
+    dialogsInBody: true,
+    placeholder: 'Please do be respectful submitting any posts',
+    tabsize: 4,
+    height: 200
+  });
+});

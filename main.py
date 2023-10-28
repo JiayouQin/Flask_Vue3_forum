@@ -74,10 +74,6 @@ class replies(db.Model):
     def get(self):
         return {'name':self.name,'adressing_id':self.adressing_id,'reply':self.reply}
 
-@app.route("/api", methods = ["GET"])
-def getAPI():
-    return jsonify([1,2,3])
-
 @app.route("/api_music_list", methods = ["GET"])
 def get_music_list():
     user = ""
@@ -109,7 +105,59 @@ def get_entries():
     return jsonify({"user":user,"entires":entries_found,
                         "videos":videos})
 
+@app.route("/api_replies", methods = ["GET","POST"])
+def get_replies():
+    try:
+        post_id = request.get_json()['postID']
+        found_post=entries.query.filter_by(_id=post_id).first()
+        if found_post:
+            found_replies=replies.query.filter_by(adressing_id=post_id).all()
+            found_replies = [e.get() for e in found_replies][::-1]
+            print({"replies":found_replies,'ret':'ok'})
+            return jsonify({"replies":found_replies,'ret':'ok'})
+    except Exception as e:
+        print(e)
+        return jsonify({'ret':'error'})
 
+@app.route("/api_submit_post", methods = ["POST"])
+def submit_post():
+    if "user" not in session:
+        return jsonify({'ret':"Login to post"})
+    _json = request.get_json()
+    print(_json)
+    title = _json["title"]
+    content = _json["content"]
+    if title == "" or content == "":
+        return jsonify({'ret':"Bad Content"})
+    commited = False
+    last_post_id = utility.query.filter_by(name="Last_entry_id").first().param + 1
+    while not commited:
+        try:
+            db.session.add(entries(last_post_id,title,content,session["user"]))
+            db.session.commit()
+            commited = True
+        except Exception as e:
+            db.session.rollback()
+            last_post_id += 1
+            print(last_post_id)
+            print(e)
+    
+    return jsonify({'ret':"ok"})
+
+@app.route("/api_submit_reply", methods = ["POST"])
+def submit_reply():
+    if "user" not in session:
+        return jsonify({'ret':"Login to reply"})
+    _json = request.get_json()
+    post_id = _json['postID']
+    content = _json["content"]
+    print(post_id,content)
+    if content == "":
+        return jsonify({'ret':"Bad Content"})
+    db.session.add(replies(session["user"], post_id, content))
+    utility.query.filter_by(name="Last_reply_id").first().param += 1
+    db.session.commit()
+    return jsonify({'ret':"ok"})
 
 @app.route("/admin", methods = ["GET","POST"])
 def admin_page():
@@ -131,12 +179,8 @@ def admin_page():
             last_post_id=utility.query.filter_by(name="Last_entry_id").first().param,
             last_reply_id=utility.query.filter_by(name="Last_reply_id").first().param
             )
-
     else:
         return redirect(url_for("home"))
-
-
-
 
 @app.route("/", methods = ["GET","POST"])
 def home():
@@ -146,16 +190,8 @@ def home():
         user = "Default_user"
     else:
         user = session["user"]
-        user_music = os.listdir(f"static/music/{user}")
-        if request.method == "POST" and request.form["submit_title"] != "":
-            utility.query.filter_by(name="Last_entry_id").first().param += 1
-            last_post_id = utility.query.filter_by(name="Last_entry_id").first().param
-            db.session.add(entries(last_post_id, request.form["submit_title"],request.form["submit_content"],session["user"]))
-            db.session.commit()
-            return jsonify({'ret':"post_submitted"})
     videos = os.listdir("static/videos")
     return render_template("index.html",name=user,values=entries.query.all(),videos=videos)
-
 
 @app.route("/videos/<video_id>")
 def videos(video_id):
@@ -186,34 +222,6 @@ def upload():
     else:
         return redirect(url_for('home'))
 
-
-@app.route("/posts/<post_id>", methods = ["GET","POST"])
-def posts(post_id):
-    user='Default_user'
-    user_music=[]
-    found_post=entries.query.filter_by(_id=post_id).first()
-    if found_post:
-        post_id=found_post._id
-        post_title=found_post.title
-        post_content=found_post
-        if request.method == "POST":
-            if "user" in session and request.form["reply_content"] != "":
-                db.session.add(replies(session["user"], post_id, request.form["reply_content"]))
-                utility.query.filter_by(name="Last_reply_id").first().param += 1
-        db.session.commit()
-        found_replies=replies.query.filter_by(adressing_id=post_id).all()
-
-        if "user" in session:
-            user = session["user"]
-            user_music=os.listdir(f"static/music/{user}")
-        music = os.listdir(f"static/music/Default_user")
-
-        return render_template("posts.html", found_post=found_post,replies=found_replies[::-1],user_music=user_music,name=user,music=music)
-
-    else:
-        return "<h1> No relevant page found!!!</h1>"
-    
-
 @app.route("/login", methods = ["GET","POST"])
 def login_page():
     error = ""
@@ -240,8 +248,6 @@ def login_page():
     except Exception as e:
         error=e
         return render_template("login.html", error = error,music=music)
-
-
 
 @app.route("/register", methods = ["GET","POST"])
 def register():
@@ -278,8 +284,6 @@ def logout():
     session.pop("email",None)
     flash("You are logged out", "info")
     return redirect(url_for("home"))
-
-
 
 @app.route("/user")
 def user():

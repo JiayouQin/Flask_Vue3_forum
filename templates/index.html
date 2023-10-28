@@ -12,51 +12,40 @@
         <div class="page-header">
           <div style='padding:5px 0px 5px 0px;border-radius: 10px;'>
           <h1 style="text-align:center;">[{currentEntry['title']}] <small style="font-size:40%">by [{currentEntry['author']}]</small></h1>
-          <p style="text-align:right;font-size:130%"> <span class="label label-default">[{replies}]</span> replies</span></p>
+          <p style="text-align:right;font-size:130%"> 
+            <span class="label label-default">[{replies.length}] replies</span>
+          </p>
           </div>
       </div>
       <div class="well" style='overflow:scroll'>
         <p v-html="currentEntry['content']"></p>
       </div>
-
-<!--         {% for reply in replies %}
-          {% set num = replies|length - loop.index %}
-              {% set num = num + 1 %}
-          <div class="panel panel-default">
+      
+      <div v-for='reply in replies'class="panel panel-default">
             <div style="padding-left: 30px" class="panel-body">
-              <span class="label label-default">{{num}}</span> <b>{{reply.name}}:</b>
+              <span class="label label-default">#[{replies.length - replies.indexOf(reply)}]</span> <b>[{reply['name']}]</b>
 
             </div>
 
-        <div class="panel-footer">
+          <div class="panel-footer">
 
-          <p>{{reply.reply|safe}}</p>
+          <p v-html="reply['reply']"></p>
           <p style="text-align:right;">Place holder: Time Posted</p>
         </div>
       </div>  
-      <br><br>
-
-      {% endfor %} -->
+      
 
 
 
-<!--     <div class="well">
+
+    <div class="well">
       <h3> Reply this Post: </h3>
-      <form method="post">
-        <textarea id="summernote" name="reply_content"></textarea>
-        <input type="submit" value="Submit">
-      </form>
+      <div>
+          <textarea id="summernoteReply" ref="submitReply"></textarea>
+          <button @click='submitReply'class="btn btn-danger">Submit</button>
+      </div>
     </div>
 
-      <script>
-        $(document).ready(function() {
-          $('#summernote').summernote({
-            placeholder: 'Please do be respectful submitting any posts',
-            tabsize: 4,
-            height: 200
-          });
-        });
-      </script> -->
     </div>
   </div>
 </div><!-- post block ends here -->
@@ -70,19 +59,21 @@
                 <div v-if='!user'class="alert alert-info" role="alert">
                     <h3>Readme:</h3>
                     <b>What is this:</b>
-                    <p>This is my personal website, using it has all the features of a fourm,<br>
-                    <p>I plan to show case my web projects here.<br>
+                    <p>This is my personal website, it has all the features of a fourm,<br>
+                    <p>I made this Website three years ago and in 2023 I migrated it to Vue3<br>
                     <b>Features:</b>
                     <p>Browsing, posting, commenting threads.<br>
-                        complete registering user system.<br>
+                        complete user registration system.<br>
                         upload pictures and videos as posts<br>
                         upload your own music tracks<br>
+                        listen to music while post and browse uninterrupted<br>
+                        To test the features: click user-registration and register.<br>
                     <b>Technical Details:</b>
                     <p>For the moment this website still use http protocal, which means it is not secured!
                     <b>DO NOT use your frequent password!</b><br>
                     All password is encrypted with SHA256 by flask_bcrypt.<br>
-                    <b>Skills needed for this website:</b><br>
-                    Python(Flask), Javascript, HTML5, CSS, Jinja<br>
+                    <b>Techstack for this website:</b><br>
+                    Python(Flask), Javascript, Vue3, SQLalchemy, HTML5, CSS, Jinja<br>
                     This message will only shown to unregistered users.
                     </p>
                 </div>
@@ -123,13 +114,13 @@
 
     <div class="well">
       <h3>Write your Post: </h3>
-        <form method="post">
-          <label for="ftitle">Title</label>
-          <input type="text" id="ftitle" name="submit_title" style='width:80%'><br><br>
-          <textarea id="summernote" name="submit_content"></textarea>
-          <input type="submit" value="Submit">
-        </form>
+        <div>
+          <label for="ftitle">Title </label>
+          <input type="text" id="ftitle" ref="submitTitle" style='width:80%'><br><br>
+          <textarea id="summernotePost" ref="submitPost"></textarea>
+          <button @click='submitPost'class="btn btn-danger">Submit</button>
         </div>
+    </div>
     <p style="padding: 0px 0px 50px 0px"></p>
 
 
